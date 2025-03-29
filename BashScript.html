@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Bash Scripting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Roboto Mono', monospace;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #00ff00;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, #00ff00, #00ccff);
+            padding: 2em 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 255, 0, 0.6);
+            border-bottom: 4px solid #1a1a1a;
+        }
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1em;
+        }
+        .bash-logo {
+            width: 200px;
+            height: auto;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.8));
+            margin-bottom: 1em;
+        }
+        .angix-logo {
+            width: 150px;
+            height: auto;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.8));
+            margin-top: 0.5em;
+            animation: fadeIn 1.2s ease, pulse 2s infinite alternate;
+        }
+        h1 {
+            font-size: 3.5em;
+            margin: 0;
+            letter-spacing: 0.12em;
+            animation: fadeIn 1.2s ease, pulse 2s infinite alternate;
+            text-shadow: 0 0 15px rgba(0, 255, 0, 0.9);
+            color: #1a1a1a;
+        }
+        .byline {
+            font-size: 1.8em;
+            margin: 0.2em 0 0;
+            color: #1a1a1a;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
+            animation: fadeIn 1.2s ease, pulse 2s infinite alternate;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.03); }
+        }
+        h2 {
+            font-size: 2.4em;
+            border-bottom: 3px solid #00ff00;
+            padding-bottom: 0.4em;
+            margin-top: 2em;
+            transition: color 0.3s ease, transform 0.3s ease;
+            text-shadow: 0 0 8px rgba(0, 255, 0, 0.7);
+        }
+        h2:hover {
+            color: #00ccff;
+            transform: translateX(8px);
+        }
+        h3 {
+            font-size: 1.9em;
+            margin-top: 1.5em;
+            color: #00ff00;
+            text-shadow: 0 0 6px rgba(0, 255, 0, 0.5);
+        }
+        p {
+            margin-bottom: 1.2em;
+            color: #ccffcc;
+        }
+        ul, ol {
+            margin-bottom: 1.2em;
+            padding-left: 30px;
+        }
+        ul {
+            list-style: square;
+            color: #ccffcc;
+        }
+        ol {
+            list-style: decimal;
+            color: #ccffcc;
+        }
+        pre {
+            background-color: #2a2a2a;
+            border: 2px solid #00ff00;
+            padding: 1.8em;
+            margin: 1.8em 0;
+            overflow-x: auto;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1em;
+            line-height: 1.6;
+            border-radius: 10px;
+            color: #b0f032;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 12px rgba(0, 255, 0, 0.6);
+            position: relative;
+        }
+        pre:hover {
+            border-color: #00ccff;
+            box-shadow: 0 0 18px rgba(0, 255, 0, 0.8);
+            transform: translateY(-3px);
+        }
+        code {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.95em;
+            background-color: #2a2a2a;
+            padding: 0.3em 0.5em;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            color: #b0f032;
+            transition: all 0.3s ease;
+        }
+        code:hover {
+            background-color: #333333;
+            color: #c1f345;
+            border-color: #00ccff;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3em;
+            background-color: #1a1a1a;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            border: 2px solid #00ff00;
+            animation: fadeIn 1.2s ease;
+        }
+        .highlight {
+            background-color: #2a2a2a;
+            padding: 0.3em;
+            border-radius: 4px;
+            color: #00ff00;
+        }
+        .warning {
+            color: #ff4500;
+            font-weight: bold;
+        }
+        strong {
+            color: #00ff00;
+            font-weight: 700;
+        }
+        em {
+            color: #ff4500;
+            font-style: italic;
+        }
+        a {
+            color: #00ccff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        a:hover {
+            color: #00ffff;
+            text-decoration: underline;
+        }
+        #footer {
+            text-align: center;
+            padding: 2em;
+            background-color: #2a2a2a;
+            color: #00ff00;
+            border-radius: 10px;
+            margin-top: 3em;
+            animation: fadeIn 1.2s ease, slideIn 1s ease-in-out 0.5s;
+            border: 2px solid #00ff00;
+            box-shadow: 0 0 12px rgba(0,255,0,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        .language-bash {
+            background-color: #2a2a2a;
+            border: 2px solid #00ff00;
+            padding: 1.8em;
+            margin: 1.8em 0;
+            border-radius: 10px;
+            color: #b0f032;
+            box-shadow: 0 0 12px rgba(0,255,0,0.6);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .language-bash:hover {
+            border-color: #00ccff;
+            box-shadow: 0 0 18px rgba(0,255,0,0.8);
+            transform: translateY(-3px);
+        }
+        .interactive-demo {
+            background-color: #2a2a2a;
+            padding: 1.5em;
+            border-radius: 10px;
+            margin: 1.5em 0;
+            border: 2px solid #00ff00;
+            box-shadow: 0 0 12px rgba(0,255,0,0.6);
+        }
+        .nav-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            max-width: 1000px;
+            margin: 1.5em auto;
+            padding: 0 20px;
+        }
+        .nav-button {
+            padding: 10px 20px;
+            background-color: #1a1a1a;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        .nav-button:hover {
+            background-color: #00ccff;
+            color: #1a1a1a;
+            border-color: #00ccff;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.8);
+        }
+        .nav-button:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.7);
+        }
+        .copy-button {
+            position: absolute;
+            top: 0.5em;
+            right: 0.5em;
+            background-color: #00ff00;
+            color: #1a1a1a;
+            padding: 0.3em 0.6em;
+            border-radius: 4px;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            border: none;
+        }
+        .copy-button:hover {
+            background-color: #00ccff;
+        }
+        .copy-button:active {
+            background-color: #0088cc;
+            transform: scale(0.95);
+        }
+        .ayah-section {
+            text-align: center;
+            margin-top: 3em;
+            padding: 2em;
+            background-color: #2a2a2a;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            box-shadow: 0 0 12px rgba(0,255,0,0.6);
+        }
+        .ayah-section .flag {
+            font-size: 3em;
+            margin-bottom: 1em;
+        }
+        .ayah-section .arabic {
+            font-size: 2em;
+            color: #ccffcc;
+            direction: rtl;
+            line-height: 1.8;
+        }
+        .ayah-section .translation {
+            font-size: 1.2em;
+            color: #ccffcc;
+        }
+        .prayer {
+            margin-top: 1em;
+            font-size: 1.2em;
+            color: #ccffcc;
+            direction: rtl;
+        }
+        .prayer .arabic-prayer {
+            font-size: 1.4em;
+            direction: rtl;
+            color: #ccffcc;
+            line-height: 1.6;
+        }
+        .prayer .english-prayer {
+            font-size: 1.2em;
+            color: #ccffcc;
+            direction: ltr;
+            line-height: 1.6;
+        }
+        .donate-button {
+            margin-top: 1.5em;
+            display: inline-block;
+            padding: 0.8em 1.5em;
+            background-color: #1a1a1a;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.6);
+        }
+        .donate-button:hover {
+            background-color: #00ff00;
+            color: #1a1a1a;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.9), 0 0 40px rgba(0, 204, 255, 0.7);
+            transform: scale(1.05) translateY(-3px);
+            border-color: #00ccff;
+        }
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            color: #00ff00;
+            font-size: 1.8em;
+            text-decoration: none;
+            border: 2px solid #00ff00;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            background-color: #1a1a1a;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.6);
+        }
+        .social-icon:hover {
+            color: #1a1a1a;
+            background-color: #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 1), 0 0 30px rgba(0, 204, 255, 0.8);
+            transform: scale(1.15) translateY(-5px);
+            border-color: #00ccff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5em;
+            }
+            h1 {
+                font-size: 2.5em;
+            }
+            .byline {
+                font-size: 1.4em;
+            }
+            h2 {
+                font-size: 1.8em;
+            }
+            h3 {
+                font-size: 1.5em;
+            }
+            .bash-logo {
+                width: 150px;
+            }
+            .angix-logo {
+                width: 120px;
+            }
+            .nav-buttons {
+                grid-template-columns: 1fr;
+                padding: 0 10px;
+            }
+            .nav-button {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+            pre {
+                padding: 1em;
+                font-size: 0.9em;
+            }
+            .ayah-section {
+                padding: 1.5em;
+            }
+            .ayah-section .arabic {
+                font-size: 1.5em;
+            }
+            .ayah-section .translation {
+                font-size: 1em;
+            }
+            .prayer .arabic-prayer {
+                font-size: 1.2em;
+            }
+            .prayer .english-prayer {
+                font-size: 1em;
+            }
+            .donate-button {
+                font-size: 1em;
+                padding: 0.6em 1.2em;
+            }
+            #footer {
+                padding: 1.5em;
+                gap: 20px;
+            }
+            .social-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.5em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2em;
+            }
+            .byline {
+                font-size: 1.2em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+            h3 {
+                font-size: 1.3em;
+            }
+            .bash-logo {
+                width: 120px;
+            }
+            .angix-logo {
+                width: 100px;
+            }
+            .container {
+                padding: 1em;
+            }
+            pre {
+                padding: 0.8em;
+                font-size: 0.85em;
+            }
+            .nav-button {
+                font-size: 0.85em;
+                padding: 6px 12px;
+            }
+            .ayah-section .flag {
+                font-size: 2em;
+            }
+            .ayah-section .arabic {
+                font-size: 1.2em;
+            }
+            .ayah-section .translation {
+                font-size: 0.9em;
+            }
+            .prayer .arabic-prayer {
+                font-size: 1em;
+            }
+            .prayer .english-prayer {
+                font-size: 0.9em;
+            }
+            .donate-button {
+                font-size: 0.9em;
+                padding: 0.5em 1em;
+            }
+            #footer {
+                flex-wrap: wrap;
+                gap: 15px;
+                padding: 1em;
+            }
+            .social-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 1.3em;
+            }
+        }
+    </style>
+    <script>
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copyCode(event) {
+            const preElement = event.target.closest('pre');
+            const codeText = preElement.textContent.trim();
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(codeText).then(() => {
+                    alert('Code copied to clipboard!');
+                }).catch(err => {
+                    console.error('Clipboard API failed: ', err);
+                    fallbackCopy(codeText);
+                });
+            } else {
+                fallbackCopy(codeText);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert('Code copied to clipboard (fallback method)!');
+            } catch (err) {
+                console.error('Fallback copy failed: ', err);
+                alert('Failed to copy code. Please select and copy manually.');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.language-bash').forEach(pre => {
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'copy-button';
+                copyBtn.textContent = 'Copy';
+                copyBtn.addEventListener('click', copyCode);
+                pre.appendChild(copyBtn);
+            });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Gnu-bash-logo.svg" alt="Bash Logo" class="bash-logo">
+            <h1>Mastering Bash Scripting</h1>
+            <p class="byline">By Angix Black</p>
+            <img src="Angixblack.png" alt="Angix Black Logo" class="angix-logo">
+        </div>
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="scrollToSection('introduction')">Introduction</button>
+            <button class="nav-button" onclick="scrollToSection('getting-started')">Getting Started</button>
+            <button class="nav-button" onclick="scrollToSection('core-concepts')">Core Concepts</button>
+            <button class="nav-button" onclick="scrollToSection('control-flow')">Control Flow</button>
+            <button class="nav-button" onclick="scrollToSection('operators-syntax')">Operators & Syntax</button>
+            <button class="nav-button" onclick="scrollToSection('debugging')">Debugging</button>
+            <button class="nav-button" onclick="scrollToSection('best-practices')">Best Practices</button>
+            <button class="nav-button" onclick="scrollToSection('bash-manual')">Bash Manual</button>
+            <button class="nav-button" onclick="scrollToSection('automation')">Automation</button>
+            <button class="nav-button" onclick="scrollToSection('advanced-tools')">Advanced Tools</button>
+            <button class="nav-button" onclick="scrollToSection('signal-handling')">Signal Handling</button>
+            <button class="nav-button" onclick="scrollToSection('process-management')">Process Management</button>
+            <button class="nav-button" onclick="scrollToSection('pipelines')">Pipelines</button>
+            <button class="nav-button" onclick="scrollToSection('parameter-expansion')">Parameter Expansion</button>
+            <button class="nav-button" onclick="scrollToSection('error-handling')">Error Handling</button>
+            <button class="nav-button" onclick="scrollToSection('project')">Project</button>
+        </div>
+    </header>
+    <div class="container">
+        <section id="introduction">
+            <h2>Introduction to Bash Scripting</h2>
+            <p>
+                Bash, short for Bourne Again SHell, is a powerful Unix shell and command-line interpreter that extends the capabilities of the original Bourne Shell (sh). It’s the default shell on most Linux distributions and macOS, making it a critical tool for anyone working in a Unix-like environment. Bash scripting allows you to automate repetitive tasks, manage systems, and create powerful workflows by combining simple commands into reusable programs.
+            </p>
+            <ul>
+                <li><strong>What is Bash?</strong>
+                    <ul>
+                        <li>A shell that interprets commands you type into a terminal.</li>
+                        <li>A scripting language where you can write <span class="highlight">sequences of commands</span> in a file (a script) to execute them as a single unit.</li>
+                        <li>Built on top of the original Bourne Shell, Bash adds features like command history, job control, and advanced scripting capabilities.</li>
+                    </ul>
+                </li>
+                <li><strong>Why Master Bash?</strong>
+                    <ul>
+                        <li><em>Automation:</em> Turn time-consuming manual tasks—like file renaming or backups—into one-line scripts.</li>
+                        <li><em>System Management:</em> Manage users, monitor processes, or configure servers efficiently.</li>
+                        <li><em>Development:</em> Automate build processes, run tests, or deploy applications with precision.</li>
+                        <li><em>Efficiency:</em> Bash scripts are lightweight and fast, often requiring less overhead than compiled languages like C++ for system-level tasks.</li>
+                        <li><em>Universality:</em> Bash is ubiquitous on Unix systems, ensuring your skills are portable across platforms.</li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="interactive-demo">
+                <p>Here’s a simple Bash command to get your feet wet—type this into your terminal to see it in action:</p>
+                <pre id="demo1" class="language-bash">echo "Hello, Bash!"</pre>
+                <p>This command uses <code>echo</code> to print text to the screen. It’s the simplest way to output something in Bash and a building block for more complex scripts.</p>
+            </div>
+        </section>
+        <section id="getting-started">
+            <h2>Getting Started</h2>
+            <p>
+                Writing your first Bash script is straightforward once you understand the basics. A script is just a text file containing commands you’d normally type into a terminal, plus a special line at the top to tell the system how to run it. Let’s walk through the process step-by-step.
+            </p>
+            <h3>1. Crafting Your First Script</h3>
+            <ul>
+                <li><strong>Editor:</strong> Use a text editor like <code>nano</code> (simple and beginner-friendly), <code>vim</code> (powerful but with a learning curve), or even a graphical editor like VS Code.</li>
+                <li><strong>Shebang:</strong> Start your script with <code class="highlight">#!/bin/bash</code>. This line, called a shebang or hashbang, tells the system to use the Bash interpreter located at <code>/bin/bash</code> to execute the file.</li>
+                <li><strong>Example:</strong> Here’s a basic script that prints a message and the current date:</li>
+            </ul>
+            <pre id="script1" class="language-bash">#!/bin/bash
+# Print a greeting and current date
+echo "Hello, Bash scripting world!"
+date</pre>
+            <p>In this script, <code>#</code> starts a comment (ignored by Bash), <code>echo</code> outputs text, and <code>date</code> is a command that displays the current date and time. Save this as, say, <code>my_script.sh</code>.</p>
+            <h3>2. Making It Executable</h3>
+            <p>
+                Unix systems require you to mark a script as executable before you can run it directly. Use the <code>chmod</code> (change mode) command to add execute permissions:
+            </p>
+            <pre class="language-bash">chmod +x my_script.sh</pre>
+            <p>Here, <code>+x</code> adds the "execute" permission to the file for the current user. Without this, you’d need to run it explicitly with <code>bash my_script.sh</code>.</p>
+            <h3>3. Running It</h3>
+            <p>
+                Now, execute your script from the terminal by specifying its path:
+            </p>
+            <pre id="run1" class="language-bash">./my_script.sh</pre>
+            <p>The <code>./</code> means "current directory," so Bash looks for <code>my_script.sh</code> where you’re currently located. You’ll see the greeting and date printed to the screen!</p>
+        </section>
+        <section id="core-concepts">
+            <h2>Core Bash Concepts</h2>
+            <p>
+                To write effective Bash scripts, you need to grasp its foundational elements. These concepts let you interact with the system, store data, and control script behavior.
+            </p>
+            <h3>1. Commands</h3>
+            <p>
+                Bash scripts are built around Unix commands—small programs like <code>ls</code> (list directory, though it’s <code>dir</code> on some systems), <code>mkdir</code> (make directory), or <code>grep</code> (search text). You can use them directly in scripts or capture their output. For example:
+            </p>
+            <pre class="language-bash">echo "Current directory: $(pwd)"</pre>
+            <p>Here, <code>pwd</code> (print working directory) outputs the current path, and <code>$( )</code> captures that output to include it in the <code>echo</code> statement.</p>
+            <h3>2. Variables</h3>
+            <p>
+                Variables store data for later use—no type declaration needed, just assign a value with <code>=</code>. Access them with a <code>$</code> prefix. Here’s an example:
+            </p>
+            <pre id="var1" class="language-bash">#!/bin/bash
+NAME="User"
+echo "Hello, $NAME!"
+</pre>
+            <p><code>NAME="User"</code> sets the variable, and <code>$NAME</code> retrieves it. Note: no spaces around <code>=</code>, or Bash will misinterpret the command!</p>
+            <h3>3. Comments</h3>
+            <p>
+                Comments explain your code, making it easier to maintain. Use <code>#</code> to start a comment—everything after it on the line is ignored by Bash:
+            </p>
+            <pre class="language-bash"># This is ignored
+echo "This runs"</pre>
+            <p>Comments are crucial for documenting complex scripts or sharing code with others.</p>
+            <h3>4. Input/Output</h3>
+            <p>
+                Bash scripts can interact with users via input and output. <code>echo</code> handles output, while <code>read</code> captures input into a variable:
+            </p>
+            <pre id="io1" class="language-bash">#!/bin/bash
+echo "Enter your name:"
+read NAME
+echo "Hi, $NAME!"
+</pre>
+            <p>When run, this script prompts you to type a name, stores it in <code>NAME</code>, and then greets you with it. It’s a simple way to make scripts interactive.</p>
+        </section>
+        <section id="control-flow">
+            <h2>Control Flow</h2>
+            <p>
+                Control flow lets your script make decisions and repeat actions, turning simple command sequences into dynamic programs. Bash offers several constructs for this.
+            </p>
+            <h3>1. If Statements</h3>
+            <p>
+                Use <code>if</code> to execute code based on conditions. Conditions are tested with square brackets <code>[ ]</code>, and the syntax ends with <code>fi</code>:
+            </p>
+            <pre id="if1" class="language-bash">#!/bin/bash
+AGE=20
+if [ $AGE -ge 18 ]; then
+    echo "Adult"
+else
+    echo "Minor"
+fi</pre>
+            <p><code>-ge</code> means "greater than or equal to." Spaces around <code>[</code> and <code>]</code> are mandatory—Bash treats <code>[</code> as a command! This checks if <code>AGE</code> is 18 or older.</p>
+            <h3>2. Case Statements</h3>
+            <p>
+                For multiple conditions, <code>case</code> is cleaner than nested <code>if</code>s. It matches a value against patterns:
+            </p>
+            <pre id="case1" class="language-bash">#!/bin/bash
+echo "Pick a color (red, blue, green):"
+read COLOR
+case $COLOR in
+    "red") echo "Fiery!" ;;
+    "blue") echo "Cool!" ;;
+    "green") echo "Lush!" ;;
+    *) echo "Unknown color" ;;
+esac</pre>
+            <p><code>;;</code> ends each case, and <code>*)</code> is a catch-all for unmatched inputs. This is great for menus or option handling.</p>
+            <h3>3. Loops</h3>
+            <p><strong>For Loop:</strong></p>
+            <p>
+                Repeat actions over a list or range with <code>for</code>. The <code>{1..3}</code> syntax creates a range:
+            </p>
+            <pre id="for1" class="language-bash">#!/bin/bash
+for i in {1..3}; do
+    echo "Loop $i"
+done</pre>
+            <p>This loops three times, printing "Loop 1," "Loop 2," and "Loop 3." The <code>do</code> and <code>done</code> keywords bracket the loop body.</p>
+            <p><strong>While Loop:</strong></p>
+            <p>
+                Use <code>while</code> to loop as long as a condition is true:
+            </p>
+            <pre id="while1" class="language-bash">#!/bin/bash
+COUNT=0
+while [ $COUNT -lt 3 ]; do
+    echo "Count: $COUNT"
+    COUNT=$((COUNT + 1))
+done</pre>
+            <p><code>-lt</code> means "less than." The <code>$(( ))</code> performs arithmetic to increment <code>COUNT</code> until it reaches 3.</p>
+            <h3>4. Functions</h3>
+            <p>
+                Functions group code for reuse. Define them with a name and curly braces, then call them by name:
+            </p>
+            <pre id="func1" class="language-bash">#!/bin/bash
+greet() {
+    echo "Hello, $1!"
+}
+greet "World"</pre>
+            <p><code>$1</code> is the first argument passed to the function. Here, it prints "Hello, World!" Functions help organize scripts and reduce repetition.</p>
+        </section>
+        <section id="operators-syntax">
+            <h2>Operators & Syntax</h2>
+            <p>
+                Bash’s power comes from its operators and syntax, which let you manipulate data and control execution beyond basic commands. This includes comparison operators for numbers, strings, and files—key to writing conditional logic.
+            </p>
+            <h3>1. String Operations</h3>
+            <p>
+                Combine or manipulate strings with variables using curly braces <code>${}</code> for clarity or when concatenating:
+            </p>
+            <pre class="language-bash">TEXT="Hello"
+echo "${TEXT}, Bash!"</pre>
+            <p><code>${TEXT}</code> ensures Bash reads the variable name correctly, especially useful if followed by text (e.g., <code>${TEXT}world</code> vs. <code>$TEXTworld</code>). This outputs "Hello, Bash!"</p>
+            <h3>2. Arithmetic</h3>
+            <p>
+                Perform math with <code>$(( ))</code>, which evaluates expressions:
+            </p>
+            <pre id="math1" class="language-bash">#!/bin/bash
+A=5
+B=3
+echo $((A + B))</pre>
+            <p>This adds <code>A</code> and <code>B</code>, printing "8." Bash supports <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, and <code>%</code> (modulus), but only integer arithmetic by default.</p>
+            <h3>3. Command Substitution</h3>
+            <p>
+                Capture command output with <code>$( )</code> or backticks <code>``</code> (though <code>$( )</code> is preferred for readability):
+            </p>
+            <pre id="cmd1" class="language-bash">NOW=$(date)
+echo "It’s $NOW"</pre>
+            <p><code>$(date)</code> runs the <code>date</code> command and stores its output (e.g., "Fri Mar 28 2025...") in <code>NOW</code>. This is key for dynamic scripts.</p>
+            <h3>4. Comparison Operators</h3>
+            <p>
+                Bash uses operators within <code>[ ]</code> or <code>[[ ]]</code> for conditionals (e.g., in <code>if</code> statements). These fall into three categories: numeric, string, and file tests. Note: Spaces around operators and brackets are mandatory!
+            </p>
+            <h4>Numeric Comparisons</h4>
+            <p>Used for comparing integers:</p>
+            <ul>
+                <li><code>-eq</code>: Equal to (e.g., <code>[ 5 -eq 5 ]</code> is true).</li>
+                <li><code>-ne</code>: Not equal to (e.g., <code>[ 5 -ne 6 ]</code> is true).</li>
+                <li><code>-gt</code>: Greater than (e.g., <code>[ 7 -gt 3 ]</code> is true).</li>
+                <li><code>-ge</code>: Greater than or equal to (e.g., <code>[ 5 -ge 5 ]</code> is true).</li>
+                <li><code>-lt</code>: Less than (e.g., <code>[ 2 -lt 9 ]</code> is true).</li>
+                <li><code>-le</code>: Less than or equal to (e.g., <code>[ 4 -le 4 ]</code> is true).</li>
+            </ul>
+            <pre class="language-bash">#!/bin/bash
+NUM=10
+if [ "$NUM" -ge 5 ]; then
+    echo "$NUM is greater than or equal to 5"
+fi</pre>
+            <p>This checks if <code>NUM</code> is ≥ 5. Quote variables (<code>"$NUM"</code>) to avoid errors if they’re unset.</p>
+            <h4>String Comparisons</h4>
+            <p>Used for comparing strings (use <code>=</code> and <code>!=</code> in <code>[ ]</code>, or <code>==</code> in <code>[[ ]]</code>):</p>
+            <ul>
+                <li><code>=</code>: Equal to (e.g., <code>[ "abc" = "abc" ]</code> is true).</li>
+                <li><code>!=</code>: Not equal to (e.g., <code>[ "abc" != "def" ]</code> is true).</li>
+                <li><code>-z</code>: Zero length (empty) (e.g., <code>[ -z "" ]</code> is true).</li>
+                <li><code>-n</code>: Non-zero length (not empty) (e.g., <code>[ -n "text" ]</code> is true).</li>
+                <li><code><</code> and <code>></code>: Lexicographical order (in <code>[[ ]]</code> only, e.g., <code>[[ "apple" < "banana" ]]</code> is true).</li>
+            </ul>
+            <pre class="language-bash">#!/bin/bash
+STR="hello"
+if [ "$STR" = "hello" ]; then
+    echo "String matches!"
+fi
+if [ -n "$STR" ]; then
+    echo "String is not empty!"
+fi</pre>
+            <p>This tests string equality and length. Use <code>[[ ]]</code> for safer string comparisons (e.g., handles spaces better).</p>
+            <h4>File Test Operators</h4>
+            <p>Check file properties:</p>
+            <ul>
+                <li><code>-e</code>: Exists (e.g., <code>[ -e "/path" ]</code>).</li>
+                <li><code>-f</code>: Exists and is a regular file (e.g., <code>[ -f "file.txt" ]</code>).</li>
+                <li><code>-d</code>: Exists and is a directory (e.g., <code>[ -d "/home" ]</code>).</li>
+                <li><code>-r</code>: Readable (e.g., <code>[ -r "file.txt" ]</code>).</li>
+                <li><code>-w</code>: Writable (e.g., <code>[ -w "file.txt" ]</code>).</li>
+                <li><code>-x</code>: Executable (e.g., <code>[ -x "script.sh" ]</code>).</li>
+                <li><code>-s</code>: Exists and has size > 0 (e.g., <code>[ -s "file.txt" ]</code>).</li>
+            </ul>
+            <pre class="language-bash">#!/bin/bash
+FILE="test.txt"
+if [ -f "$FILE" ]; then
+    echo "$FILE is a regular file"
+elif [ -d "$FILE" ]; then
+    echo "$FILE is a directory"
+else
+    echo "$FILE doesn’t exist or is something else"
+fi</pre>
+            <p>This checks if <code>test.txt</code> is a file or directory—super useful for scripts handling files!</p>
+        </section>
+        <section id="debugging">
+            <h2>Debugging Bash Scripts</h2>
+            <p>
+                Bugs happen—Bash provides tools to find and fix them. Debugging ensures your scripts run reliably.
+            </p>
+            <ul>
+                <li><strong><code>-x</code> Flag:</strong> Run your script with tracing to see each command as it executes:</li>
+                <pre class="language-bash">bash -x my_script.sh</pre>
+                <p>This outputs every line prefixed with <code>+</code>, showing variable values and command expansions—perfect for spotting where things go wrong.</p>
+                <li><strong><code>set -e</code>:</strong> Exit immediately if any command fails (returns a non-zero status):</li>
+                <pre class="language-bash">#!/bin/bash
+set -e
+echo "This runs"
+false # Script stops here
+echo "This won’t run"</pre>
+                <p><code>false</code> always fails, so <code>set -e</code> halts the script before the last <code>echo</code>. Use this to catch errors early.</p>
+            </ul>
+        </section>
+        <section id="best-practices">
+            <h2>Best Practices</h2>
+            <p>
+                Writing good Bash scripts means making them readable, reliable, and maintainable. Follow these tips:
+            </p>
+            <ul>
+                <li><strong>Meaningful Names:</strong> Use descriptive variable names like <code>FILE_COUNT</code> instead of <code>x</code>.</li>
+                <li><strong>Comments:</strong> Explain why code exists, not just what it does—e.g., “# Ensure backup is unique” vs. “# Set TIMESTAMP”.</li>
+                <li><strong>Quote Variables:</strong> Use <code>"$VAR"</code> to handle spaces or empty values safely—unquoted variables can break scripts.</li>
+                <li><strong>Test Safely:</strong> Run scripts in a sandbox or with <code>echo</code> statements to preview actions before modifying files.</li>
+            </ul>
+            <pre class="language-bash">#!/bin/bash
+# Backup files with timestamp to avoid overwrites
+TIMESTAMP=$(date +%Y%m%d)
+cp "$HOME/docs" "$HOME/docs_backup_$TIMESTAMP"</pre>
+            <p>This script quotes <code>"$HOME/docs"</code> to handle spaces in paths and uses a timestamp for unique backups—simple but robust.</p>
+        </section>
+        <section id="bash-manual">
+            <h2>Exploring the Bash Manual</h2>
+            <p>
+                The <a href="https://www.gnu.org/software/bash/manual/" target="_blank">Bash Manual</a> is the definitive resource for Bash’s features and syntax. It covers everything from basic commands to advanced topics like arrays, parameter expansion, and signal handling—perfect for deepening your understanding.
+            </p>
+            <p>
+                For example, the manual explains arrays, which let you store multiple values in one variable. Here’s how to use them:
+            </p>
+            <pre class="language-bash">#!/bin/bash
+# Declare an array of fruits
+FRUITS=("apple" "banana" "orange")
+# Access all elements
+echo "All fruits: ${FRUITS[@]}"
+# Access one element
+echo "First fruit: ${FRUITS[0]}"</pre>
+            <p><code>${FRUITS[@]}</code> prints all array elements, while <code>${FRUITS[0]}</code> gets the first (arrays are zero-indexed). The manual details this and more, like how to loop over arrays or use associative arrays (key-value pairs) in Bash 4+.</p>
+        </section>
+        <section id="automation">
+            <h2>Automating Real Tasks</h2>
+            <p>
+                Bash shines when automating real-world tasks. Think about daily chores like backing up files, cleaning up old logs, or checking system health. Here’s a practical example—a script to back up a directory with a timestamp and log the action:
+            </p>
+            <pre class="language-bash">#!/bin/bash
+# Backup directory with date and log it
+SOURCE="$HOME/documents"
+DEST="$HOME/backups"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+LOG="$HOME/backup_log.txt"
+
+# Create backups directory if it doesn’t exist
+mkdir -p "$DEST"
+# Copy files
+cp -r "$SOURCE" "$DEST/documents_$TIMESTAMP"
+# Log the action
+echo "Backup created at $TIMESTAMP" >> "$LOG"</pre>
+            <p>This script uses <code>-p</code> with <code>mkdir</code> to avoid errors if the directory exists, <code>-r</code> with <code>cp</code> to copy recursively, and <code>>></code> to append to the log. Run it with <code>cron</code> (e.g., <code>0 2 * * * /path/to/script.sh</code>) for daily 2 AM backups!</p>
+        </section>
+        <section id="advanced-tools">
+            <h2>Advanced Tools: awk and sed</h2>
+            <p>
+                Bash pairs beautifully with tools like <code>awk</code> (text processing) and <code>sed</code> (stream editing) to handle complex data manipulation. They’re command-line powerhouses you’ll find on most Unix systems.
+            </p>
+            <h3>1. awk</h3>
+            <p>
+                <code>awk</code> processes text line-by-line, splitting it into fields. It’s great for extracting data from structured output:
+            </p>
+            <pre class="language-bash">#!/bin/bash
+# Print usernames from /etc/passwd
+awk -F: '{print $1}' /etc/passwd</pre>
+            <p><code>-F:</code> sets the field separator to a colon, and <code>$1</code> grabs the first field (username) from each line of <code>/etc/passwd</code>. This lists all system users.</p>
+            <h3>2. sed</h3>
+            <p>
+                <code>sed</code> edits text streams—perfect for search-and-replace or line modifications:
+            </p>
+            <pre class="language-bash">#!/bin/bash
+# Replace "hello" with "hi" in a file
+sed 's/hello/hi/g' input.txt > output.txt</pre>
+            <p><code>s/hello/hi/g</code> substitutes "hello" with "hi" globally (<code>g</code>) on each line, redirecting the result to <code>output.txt</code>. Combine it with pipes for real-time edits!</p>
+        </section>
+        <section id="signal-handling">
+            <h2>Signal Handling</h2>
+            <p>
+                Bash can trap signals (e.g., Ctrl+C) to handle interruptions gracefully. Use the <code>trap</code> command to define actions for specific signals:
+            </p>
+            <pre class="language-bash">#!/bin/bash
+# Trap Ctrl+C (SIGINT) and clean up
+cleanup() {
+    echo "Script interrupted! Cleaning up..."
+    rm -f /tmp/tempfile
+    exit 1
+}
+trap cleanup INT
+
+echo "Running... (Press Ctrl+C to interrupt)"
+touch /tmp/tempfile
+sleep 10
+echo "Done!"</pre>
+            <p><code>trap cleanup INT</code> runs the <code>cleanup</code> function when SIGINT (interrupt) is received. This script creates a temp file, waits, and cleans up if interrupted—useful for ensuring resources are freed.</p>
+        </section>
+        <section id="process-management">
+            <h2>Process Management</h2>
+            <p>
+                Bash lets you manage processes with commands like <code>&</code> (background), <code>jobs</code>, <code>fg</code>, <code>bg</code>, and <code>kill</code>. Here’s a script to run a task in the background and manage it:
+            </p>
+            <pre class="language-bash">#!/bin/bash
+# Run a long task in the background
+echo "Starting background task..."
+sleep 30 & # Background process
+PID=$!    # Capture process ID
+
+echo "Background PID: $PID"
+sleep 2
+echo "Killing background task..."
+kill $PID
+wait $PID 2>/dev/null # Wait for it to finish, suppress error
+echo "Task stopped."</pre>
+            <p><code>&</code> runs <code>sleep</code> in the background, <code>$!</code> gets its PID, and <code>kill</code> stops it. <code>wait</code> ensures the script waits for completion—great for managing parallel tasks.</p>
+        </section>
+        <section id="pipelines">
+            <h2>Pipelines</h2>
+            <p>
+                Pipelines (<code>|</code>) connect commands, passing output from one as input to the next. They’re a cornerstone of Unix philosophy. Here’s an example to count unique users in a log:
+            </p>
+            <pre class="language-bash">#!/bin/bash
+# Count unique users from a log file
+LOG="/var/log/auth.log"
+echo "Unique users in $LOG:"
+cat "$LOG" | grep "session opened" | awk '{print $11}' | sort | uniq | wc -l</pre>
+            <p>This pipeline:
+                - <code>cat</code> reads the log.
+                - <code>grep</code> filters session openings.
+                - <code>awk</code> extracts the username (field 11).
+                - <code>sort | uniq</code> removes duplicates.
+                - <code>wc -l</code> counts the lines (unique users).
+            Pipelines chain commands efficiently, avoiding temporary files.</p>
+        </section>
+        <section id="parameter-expansion">
+            <h2>Parameter Expansion</h2>
+            <p>
+                Parameter expansion lets you manipulate variables with advanced syntax, like setting defaults or modifying strings. It uses <code>${}</code> with special operators:
+            </p>
+            <pre class="language-bash">#!/bin/bash
+# Set a default value if variable is unset
+NAME=${1:-"Guest"}  # Use first argument or "Guest"
+echo "Hello, $NAME!"
+
+# Remove prefix or suffix
+FILE="report.txt"
+echo "Base name: ${FILE%.txt}"  # Removes .txt
+
+# Length of a string
+TEXT="Bash"
+echo "Length: ${#TEXT}"  # Prints 4</pre>
+            <p>
+                - <code>${VAR:-default}</code> uses "default" if <code>VAR</code> is unset or null.
+                - <code>${VAR%.suffix}</code> removes the shortest match of ".suffix" from the end.
+                - <code>${#VAR}</code> gives the string length. These are powerful for dynamic scripts!
+            </p>
+        </section>
+        <section id="error-handling">
+            <h2>Error Handling</h2>
+            <p>
+                Robust scripts handle errors gracefully. Check exit codes (<code>$?</code>) and provide feedback instead of failing silently:
+            </p>
+            <pre class="language-bash">#!/bin/bash
+# Check if a file exists and copy it
+SOURCE="important.txt"
+DEST="backup.txt"
+
+if [ ! -f "$SOURCE" ]; then
+    echo "Error: $SOURCE not found!" >&2
+    exit 1
+fi
+
+cp "$SOURCE" "$DEST"
+if [ $? -ne 0 ]; then
+    echo "Error: Copy failed!" >&2
+    exit 1
+else
+    echo "Copy succeeded!"
+fi</pre>
+            <p>
+                - <code>[ ! -f "$SOURCE" ]</code> tests if the file doesn’t exist.
+                - <code>$?</code> holds the last command’s exit code (0 = success, non-zero = failure).
+                - <code>&>2</code> sends errors to stderr. This ensures users know what went wrong.
+            </p>
+        </section>
+        <section id="project">
+            <h2>Project: Log Analyzer</h2>
+            <p>
+                Let’s tie it all together with a simple log analyzer that counts failed login attempts from <code>/var/log/auth.log</code>:
+            </p>
+            <pre class="language-bash">#!/bin/bash
+# Log analyzer for failed login attempts
+LOG="/var/log/auth.log"
+OUTPUT="failed_logins_$(date +%Y%m%d).txt"
+
+# Check if log exists
+if [ ! -f "$LOG" ]; then
+    echo "Error: $LOG not found!" >&2
+    exit 1
+fi
+
+# Trap Ctrl+C for cleanup
+cleanup() {
+    echo "Interrupted! Cleaning up..." >&2
+    rm -f "$OUTPUT"
+    exit 1
+}
+trap cleanup INT
+
+echo "Analyzing failed login attempts..."
+grep "Failed password" "$LOG" > "$OUTPUT"
+COUNT=$(wc -l < "$OUTPUT")
+
+if [ $COUNT -eq 0 ]; then
+    echo "No failed attempts found."
+    rm -f "$OUTPUT"
+else
+    echo "Found $COUNT failed login attempts. Details in $OUTPUT."
+fi</pre>
+            <p>
+                This script:
+                - Checks for the log file (error handling).
+                - Uses a trap for cleanup (signal handling).
+                - Filters failed logins with <code>grep</code> (pipelines).
+                - Saves results with a timestamp (automation).
+                - Reports the count or cleans up if none found (control flow).
+            Run it with <code>sudo</code> if needed for log access—a real-world tool!
+            </p>
+        </section>
+        <div class="ayah-section">
+            <p class="arabic">
+                وَمَا تَوْفِيقِي إِلَّا بِاللَّهِ ۚ عَلَيْهِ تَوَكَّلْتُ وَإِلَيْهِ أُنِيبُ
+            </p>
+            <p class="translation">
+                "And my success is not but through Allah. Upon him I have relied, and to Him I return"
+            </p>
+            <div class="prayer">
+                <p class="arabic-prayer">
+                    إن كنت تريد دعمي، فأدعم فلسطين.. أدعم طفلاً فقد عائلته، وأمًّا تحت الركام، ووطناً ينزف!<br>
+                    ليس هناك حيادٌ حين يُقتل الأبرياء، ليس هناك صمتٌ بلا ثمن! فلسطين تُمحى أمام أعين العالم، لكن صوتك قد يكون حياةً لمن بقي.<br>
+                    لا تكتفِ بالحزن.. تحرّك! قاطع، انشر، تكلم، لا تكن شاهدًا أخرس على جريمة العصر!<br>
+                    فلسطين باقية، والاحتلال زائل.. والحق لا يموت!
+                </p>
+                <p class="english-prayer">
+                    If you want to support me, support Palestine.. support a child who lost their family, a mother under the rubble, and a homeland bleeding!<br>
+                    There is no neutrality when the innocent are killed, no silence without a cost! Palestine is being erased before the world’s eyes, but your voice could be life for those who remain.<br>
+                    Don’t settle for sorrow.. act! Boycott, spread the word, speak out, don’t be a mute witness to the crime of the age!<br>
+                    Palestine endures, the occupation will fade.. and the truth never dies!
+                </p>
+            </div>
+            <a href="https://donate.unrwa.org/int/en/gaza" target="_blank" class="donate-button">Donate</a>
+        </div>
+        <div id="footer">
+            <a href="https://twitter.com/AngixBlack" target="_blank" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="https://instagram.com/AngixBlack" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://github.com/AngixBlack" target="_blank" class="social-icon"><i class="fab fa-github"></i></a>
+            <a href="https://facebook.com/AngixBlack" target="_blank" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="https://youtube.com/@AngixBlack" target="_blank" class="social-icon"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+</body>
+</html>
